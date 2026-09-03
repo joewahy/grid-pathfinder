@@ -174,9 +174,16 @@ function buildGrid(newSize) {
     setStatus('');
 }
 
-// Show the DFS traversal-order note only while DFS is the selected algorithm.
+// One-line explainer shown between the grid and the controls, per algorithm.
+const ALGO_NOTES = {
+    dfs: 'DFS visits in a fixed order: down → right → up → left, backtracking at dead ends.',
+    bfs: 'BFS explores outward in waves using a queue, so the first route it reaches is the shortest.',
+};
+
 function syncAlgoNote() {
-    algoNote.hidden = selectAlgo.value !== 'dfs';
+    const note = ALGO_NOTES[selectAlgo.value];
+    algoNote.textContent = note ?? '';
+    algoNote.hidden = !note;
 }
 
 selectAlgo.addEventListener('change', syncAlgoNote);
