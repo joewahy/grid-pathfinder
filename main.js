@@ -9,6 +9,7 @@ const clearBtn = document.getElementById('clear');
 const sizeInput = document.getElementById('sizeInput');
 const resizeBtn = document.getElementById('resizeBtn');
 const statusEl = document.getElementById('status');
+const algoNote = document.getElementById('algoNote');
 
 let addingWalls = false;
 let clearStage = 0;
@@ -172,6 +173,14 @@ function buildGrid(newSize) {
     setClearStage(0);
     setStatus('');
 }
+
+// Show the DFS traversal-order note only while DFS is the selected algorithm.
+function syncAlgoNote() {
+    algoNote.hidden = selectAlgo.value !== 'dfs';
+}
+
+selectAlgo.addEventListener('change', syncAlgoNote);
+syncAlgoNote();
 
 buildGrid(size);
 
