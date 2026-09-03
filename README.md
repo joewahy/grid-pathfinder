@@ -14,7 +14,7 @@ An interactive visualizer for pathfinding on a grid. Draw walls, pick BFS or DFS
 - **Path highlighting** — the found path is traced across the grid once the goal is reached
 - **No-path detection** — if the goal is walled off, the status line shows "No path exists — the end is blocked off."
 - **Two-stage Clear** — first click clears the search and path; the button becomes **Clear walls**, and a second click removes the walls too
-- **Light/dark toggle** — persisted across visits in `localStorage`
+- **Algorithm note** — a one-line explainer of the selected algorithm sits between the grid and the controls
 
 ## How it works
 
@@ -29,8 +29,8 @@ Both skip tiles with the `active` class (walls) and `await sleep(10)` (from `uti
 
 ```
 .
-├── index.html            # markup + inline theme-toggle script
-├── style.css             # grid layout, tile states, light/dark theme variables
+├── index.html            # markup
+├── style.css             # grid layout, tile states, theme variables
 ├── main.js               # grid setup, event wiring, wall mode, drag/drop, start/clear
 ├── utils.js              # shared sleep() helper for animation timing
 ├── algorithms/
