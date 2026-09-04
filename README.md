@@ -42,7 +42,7 @@ Both skip tiles with the `active` class (walls) and `await sleep(10)` (from `uti
 
 ## Running it
 
-Static site, no build step or dependencies — but it must be served over HTTP. `main.js` uses ES modules, which browsers won't load from a `file://` path, so double-clicking `index.html` won't work.
+Static site, no build step or dependencies, but it must be served over HTTP. `main.js` uses ES modules, which browsers won't load from a `file://` path, so double clicking `index.html` won't work.
 
 ```bash
 npx serve .
@@ -55,7 +55,7 @@ Then open the printed local URL.
 ## Usage
 
 1. *(Optional)* Set a board size and click **New board**.
-2. *(Optional)* Drag the start or goal tile to reposition it — drop it on an open tile to move, or on the other endpoint to swap.
+2. *(Optional)* Drag the start or goal tile to reposition it, drop it on an open tile to move, or on the other endpoint to swap.
 3. Click **Add walls**, mark obstacle tiles, then click **Add walls** again to exit.
 4. Pick **DFS** or **BFS**.
 5. Click **Start** to run the animated search.
