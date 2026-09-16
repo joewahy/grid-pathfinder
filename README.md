@@ -45,6 +45,13 @@ Both skip tiles with the `active` class (walls) and `await sleep(10)` (from `uti
 Static site, no build step or dependencies, but it must be served over HTTP. `main.js` uses ES modules, which browsers won't load from a `file://` path, so double clicking `index.html` won't work.
 
 ```bash
+git clone https://github.com/joewahy/grid-pathfinder.git
+cd grid-pathfinder
+```
+
+Then serve it:
+
+```bash
 npx serve .
 # or
 python3 -m http.server
