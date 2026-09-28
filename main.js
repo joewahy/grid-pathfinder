@@ -1,8 +1,10 @@
 import { dfsRecursion } from './algorithms/dfs.js';
 import { bfs } from './algorithms/bfs.js'
+import { dijkstra } from './algorithms/dijkstra.js';
 
 const grid = document.getElementById('grid');
 const wallsBtn = document.getElementById('addWalls');
+const weightsBtn = document.getElementById('addWeights');
 const startBtn = document.getElementById('start');
 const selectAlgo = document.getElementById('algorithms');
 const clearBtn = document.getElementById('clear');
@@ -12,7 +14,9 @@ const statusEl = document.getElementById('status');
 const algoNote = document.getElementById('algoNote');
 
 let addingWalls = false;
+let addingWeights = false;
 let clearStage = 0;
+const WEIGHT_CYCLE = [1, 2, 5];
 
 let size = 8;
 let children = [];
@@ -26,7 +30,7 @@ function toggleTileActive(e) {
 
 function setClearStage(stage) {
     clearStage = stage;
-    clearBtn.textContent = stage === 0 ? 'Clear' : 'Clear walls';
+    clearBtn.textContent = stage === 0 ? 'Clear' : 'Clear all';
 }
 
 function setStatus(message, isError = false) {
@@ -43,6 +47,37 @@ function setWallsMode(tiles, on) {
             tile.removeEventListener('click', toggleTileActive);
         }
     });
+}
+
+// cycles a tile's cost through WEIGHT_CYCLE; 1 is "no weight" (no dataset/class)
+function toggleTileWeight(e) {
+    const tile = e.currentTarget;
+    const current = Number(tile.dataset.weight) || 1;
+    const next = WEIGHT_CYCLE[(WEIGHT_CYCLE.indexOf(current) + 1) % WEIGHT_CYCLE.length];
+
+    tile.classList.remove('weight-2', 'weight-5');
+    if (next === 1) {
+        delete tile.dataset.weight;
+    } else {
+        tile.dataset.weight = next;
+        tile.classList.add(`weight-${next}`);
+    }
+}
+
+function setWeightsMode(tiles, on) {
+    tiles.forEach((tile) => {
+        if (on) {
+            tile.addEventListener('click', toggleTileWeight);
+        } else {
+            tile.removeEventListener('click', toggleTileWeight);
+        }
+    });
+}
+
+function exitWeightsMode() {
+    addingWeights = false;
+    weightsBtn.classList.remove('active-mode');
+    setWeightsMode([...document.getElementsByClassName('tile')], false);
 }
 
 function getRowCol(tile) {
@@ -170,6 +205,8 @@ function buildGrid(newSize) {
 
     addingWalls = false;
     wallsBtn.classList.remove('active-mode');
+    addingWeights = false;
+    weightsBtn.classList.remove('active-mode');
     setClearStage(0);
     setStatus('');
 }
@@ -178,6 +215,7 @@ function buildGrid(newSize) {
 const ALGO_NOTES = {
     dfs: 'DFS visits in a fixed order: down → right → up → left, backtracking at dead ends.',
     bfs: 'BFS explores outward in waves using a queue, so the first route it reaches is the shortest.',
+    dijkstra: 'Dijkstra always expands the cheapest known path first, so it finds the lowest-cost route even when tiles have different weights.',
 };
 
 function syncAlgoNote() {
@@ -186,8 +224,19 @@ function syncAlgoNote() {
     algoNote.hidden = !note;
 }
 
+// weights only affect Dijkstra, so only let them be edited while it's selected
+function syncWeightsAvailability() {
+    const isDijkstra = selectAlgo.value === 'dijkstra';
+    weightsBtn.disabled = !isDijkstra;
+    if (!isDijkstra && addingWeights) {
+        exitWeightsMode();
+    }
+}
+
 selectAlgo.addEventListener('change', syncAlgoNote);
+selectAlgo.addEventListener('change', syncWeightsAvailability);
 syncAlgoNote();
+syncWeightsAvailability();
 
 buildGrid(size);
 
@@ -213,7 +262,8 @@ clearBtn.addEventListener('click', () => {
         setClearStage(1);
     } else {
         children.forEach(tile => {
-            tile.classList.remove('visited', 'deadend', 'path', 'active');
+            tile.classList.remove('visited', 'deadend', 'path', 'active', 'weight-2', 'weight-5');
+            delete tile.dataset.weight;
         });
         setClearStage(0);
     }
@@ -226,10 +276,34 @@ wallsBtn.addEventListener('click', () => {
     });
     setClearStage(0);
     setStatus('');
+
+    if (addingWeights) {
+        exitWeightsMode();
+    }
+
     addingWalls = !addingWalls;
     wallsBtn.classList.toggle('active-mode', addingWalls); // glow the button while wall mode is on
     const tiles = [...document.getElementsByClassName('tile')];
     setWallsMode(tiles, addingWalls);
+});
+
+weightsBtn.addEventListener('click', () => {
+    children.forEach(tile => {
+        tile.classList.remove('visited', 'deadend', 'path');
+    });
+    setClearStage(0);
+    setStatus('');
+
+    if (addingWalls) {
+        addingWalls = false;
+        wallsBtn.classList.remove('active-mode');
+        setWallsMode([...document.getElementsByClassName('tile')], false);
+    }
+
+    addingWeights = !addingWeights;
+    weightsBtn.classList.toggle('active-mode', addingWeights); // glow the button while weight mode is on
+    const tiles = [...document.getElementsByClassName('tile')];
+    setWeightsMode(tiles, addingWeights);
 });
 
 startBtn.addEventListener('click', async () => {
@@ -240,6 +314,9 @@ startBtn.addEventListener('click', async () => {
         wallsBtn.classList.remove('active-mode');
         const tiles = [...document.getElementsByClassName('tile')];
         setWallsMode(tiles, addingWalls);
+    }
+    if (addingWeights) {
+        exitWeightsMode();
     }
 
     children.forEach(tile => {
@@ -257,6 +334,8 @@ startBtn.addEventListener('click', async () => {
         if (!success) path = null;
     } else if (selectedAlgo === 'bfs') {
         path = await bfs(startRow, startCol, rows, size);
+    } else if (selectedAlgo === 'dijkstra') {
+        path = await dijkstra(startRow, startCol, rows, size);
     }
 
     if (path) {

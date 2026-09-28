@@ -13,6 +13,9 @@
     --accent-visited: #4f7ea8;
     --accent-deadend: #8a6a5a;
     --accent-path: #f2b544;
+
+    --tile-weight-2: #c3b8f0;
+    --tile-weight-5: #8f7de0;
 }
 
 * {
@@ -82,6 +85,9 @@ h1 {
 
 .first { background-color: var(--accent-start); }
 .last  { background-color: var(--accent-last); }
+
+.weight-2 { background-color: var(--tile-weight-2); }
+.weight-5 { background-color: var(--tile-weight-5); }
 
 .active {
     background-color: var(--accent-active);
@@ -153,6 +159,16 @@ button {
 button:hover {
     border-color: var(--accent-start);
     background-color: var(--tile-hover);
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+button:disabled:hover {
+    border-color: var(--border);
+    background-color: transparent;
 }
 
 button.primary {
