@@ -1,6 +1,6 @@
 # Grid Pathfinder
 
-An interactive visualizer for pathfinding on a grid. Draw walls, weight tiles, pick BFS, DFS, or Dijkstra, and watch the search explore tile by tile before it traces the final path.
+An interactive visualizer for pathfinding on a grid. Draw walls, weight tiles, pick BFS, DFS, or Dijkstra, and watch the search explore tile by tile before it traces the final path. Built with React and Vite.
 
 ![Demo of Grid Pathfinder: drawing walls, running BFS, and highlighting the found path](assets/demo.gif)
 
@@ -11,7 +11,7 @@ An interactive visualizer for pathfinding on a grid. Draw walls, weight tiles, p
 - **Draggable start/end** — drag either endpoint onto any open tile to move it, or onto the other endpoint to swap them; walls are not valid drop targets, and dragging is off while wall mode is on
 - **Wall drawing** — toggle **Add walls**, then click tiles to mark obstacles the search can't cross
 - **Weighted tiles** — toggle **Add weights**, then click tiles to cycle their cost (1 → 2 → 5 → 1); only Dijkstra takes the cost into account, so it can pick a longer-but-cheaper route over a shorter-but-costlier one. The button is only enabled when Dijkstra is selected
-- **Animated search** — visited tiles and dead ends light up as the algorithm runs
+- **Animated search** — visited tiles and dead ends light up as the algorithm runs; clearing, resizing, restarting, or moving an endpoint stops a search that is still running
 - **Path highlighting** — the found path is traced across the grid once the goal is reached
 - **No-path detection** — if the goal is walled off, the status line shows "No path exists — the end is blocked off."
 - **Two-stage Clear** — first click clears the search and path; the button becomes **Clear all**, and a second click removes walls and weights too
@@ -85,5 +85,6 @@ Then open the printed local URL. To make a production build, run `npm run build`
 ## Ideas for future improvements
 
 - Adjustable animation speed
+- Pause and step through a search (the generator-based algorithms make this a small change)
 - More algorithms (A*, greedy best-first)
 - Diagonal movement
