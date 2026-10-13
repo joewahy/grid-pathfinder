@@ -98,7 +98,7 @@ h1 {
 .deadend { background-color: var(--accent-deadend); }
 .path    { background-color: var(--accent-path); }
 
-/* drop-target feedback, toggled in handleDragOver/handleDragLeave/handleDragEnd */
+/* drop-target feedback while an endpoint is being dragged */
 .drag-over {
     outline: 2px dashed var(--accent-start);
     outline-offset: -2px;

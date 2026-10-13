@@ -6,42 +6,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:,">
     <title>Pathfinder</title>
 </head>
 <body>
-    <main class="panel">
-        <h1>Pathfinder</h1>
-
-        <div id="grid"></div>
-
-        <p id="algoNote" class="algo-note" hidden></p>
-
-        <div class="controls">
-            <div class="controls-row">
-                <select name="algorithms" id="algorithms">
-                    <option value="dfs">DFS</option>
-                    <option value="bfs">BFS</option>
-                    <option value="dijkstra">Dijkstra</option>
-                </select>
-                <div class="size-control">
-                    <label for="sizeInput">Size:</label>
-                    <input type="number" id="sizeInput" min="3" max="25" value="8">
-                </div>
-                <button id="resizeBtn" type="button">New board</button>
-            </div>
-            <div class="controls-row">
-                <button id="addWalls" type="button">Add walls</button>
-                <button id="addWeights" type="button">Add weights</button>
-                <button id="clear" type="button">Clear</button>
-                <button id="start" type="button" class="primary">Start</button>
-            </div>
-        </div>
-
-        <div id="status" class="status"></div>
-    </main>
-
-    <script type="module" src="main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>

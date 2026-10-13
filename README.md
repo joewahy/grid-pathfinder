@@ -19,48 +19,58 @@ An interactive visualizer for pathfinding on a grid. Draw walls, weight tiles, p
 
 ## How it works
 
-The grid is a size×size set of tiles. The top-left tile is the start (`.first`) and the bottom-right is the goal (`.last`); either can be dragged elsewhere. Clicking **Start** exits wall mode and runs the selected algorithm from the start tile's current position:
+A React app built with Vite. `App.jsx` owns the board (walls, weights, and the start/end positions as flat arrays indexed by `row * size + column`), the search marks, and the current mode. The top-left tile is the start and the bottom-right is the goal; either can be dragged elsewhere. Clicking **Start** exits wall/weight mode and runs the selected algorithm from the start tile's current position.
 
-- **BFS** (`algorithms/bfs.js`) explores level by level with a queue, recording each tile's predecessor so it can reconstruct the shortest path when it dequeues the goal.
-- **DFS** (`algorithms/dfs.js`) recurses in down/right/up/left order, marking tiles `visited` (and `deadend` on backtrack) so it never revisits one, and returns the first path it finds.
-- **Dijkstra** (`algorithms/dijkstra.js`) pops the lowest-cost tile from a priority queue each step, relaxing neighbors by their tile weight (default 1) so it reconstructs the cheapest path rather than just the shortest one.
+Each algorithm is a pure generator that takes the board, yields `{ type, index }` steps (`visited` or `deadend`) and returns the final path as tile indices, or `null`. `App.jsx` drives the generator, applying a step and pausing 10ms before pulling the next one, so the search stays visible. Starting a new search, clearing, resizing, or moving an endpoint cancels a search that is still animating.
 
-All three skip tiles with the `active` class (walls) and `await sleep(10)` (from `utils.js`) between steps so the search stays visible. If the goal can't be reached, `main.js` shows the no-path message.
+- **BFS** (`src/algorithms/bfs.js`) explores level by level with a queue, recording each tile's predecessor so it can reconstruct the shortest path when it dequeues the goal.
+- **DFS** (`src/algorithms/dfs.js`) recurses in down/right/up/left order, yielding `visited` (and `deadend` on backtrack) so it never revisits a tile, and returns the first path it finds.
+- **Dijkstra** (`src/algorithms/dijkstra.js`) pops the lowest-cost tile from a priority queue each step, relaxing neighbors by their tile weight (default 1) so it reconstructs the cheapest path rather than just the shortest one.
+
+All three skip walls. If the goal can't be reached, `App.jsx` shows the no-path message.
 
 ## Project structure
 
 ```
 .
-├── index.html            # markup
-├── style.css             # grid layout, tile states, theme variables
-├── main.js               # grid setup, event wiring, wall mode, drag/drop, start/clear
-├── utils.js              # shared sleep() helper for animation timing
-├── algorithms/
-│   ├── bfs.js            # breadth-first search + path reconstruction
-│   ├── dfs.js            # recursive depth-first search with backtracking
-│   └── dijkstra.js       # priority-queue search over weighted tiles + path reconstruction
+├── index.html                  # Vite entry, mounts #root
+├── vite.config.js
+├── src/
+│   ├── main.jsx                # React entry
+│   ├── App.jsx                 # board/search state, modes, drag/drop, start/clear
+│   ├── board.js                # board model helpers (size limits, weight cycle)
+│   ├── utils.js                # shared sleep() helper for animation timing
+│   ├── style.css               # grid layout, tile states, theme variables
+│   ├── components/
+│   │   ├── Grid.jsx            # tiles and drag/click handling
+│   │   └── Controls.jsx        # dropdown, size input, mode and action buttons
+│   └── algorithms/
+│       ├── index.js            # algorithm registry (label, note, generator)
+│       ├── helpers.js          # neighbor order and path reconstruction
+│       ├── bfs.js              # breadth-first search
+│       ├── dfs.js              # recursive depth-first search with backtracking
+│       └── dijkstra.js         # priority-queue search over weighted tiles
 └── assets/
-    └── demo.gif          # README demo
+    └── demo.gif                # README demo
 ```
 
 ## Running it
 
-Static site, no build step or dependencies, but it must be served over HTTP. `main.js` uses ES modules, which browsers won't load from a `file://` path, so double clicking `index.html` won't work.
+Requires Node.js.
 
 ```bash
 git clone https://github.com/joewahy/grid-pathfinder.git
 cd grid-pathfinder
+npm install
 ```
 
-Then serve it:
+Then start the dev server:
 
 ```bash
-npx serve .
-# or
-python3 -m http.server
+npm run dev
 ```
 
-Then open the printed local URL.
+Then open the printed local URL. To make a production build, run `npm run build` (output goes to `dist/`) and `npm run preview` to serve it.
 
 ## Usage
 
