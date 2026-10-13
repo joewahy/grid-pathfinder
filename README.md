@@ -19,10 +19,10 @@ An interactive visualizer for pathfinding on a grid. Draw walls, weight tiles, p
 
 ## Technologies used
 
-- **[React](https://react.dev/) 19** — UI components and board/search state
-- **[Vite](https://vite.dev/) 8** — dev server and production build, with `@vitejs/plugin-react`
-- **JavaScript (ES modules)** — the app and algorithms, using generators to stream search steps for animation
-- **Plain CSS** — grid layout, tile states, and theme variables, with no UI framework
+- JavaScript
+- React
+- Vite
+- HTML/CSS
 
 ## How it works
 
