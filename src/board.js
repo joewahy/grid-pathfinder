@@ -21,9 +21,3 @@ export function emptyMarks(size) {
 export function nextWeight(weight) {
     return WEIGHT_CYCLE[(WEIGHT_CYCLE.indexOf(weight) + 1) % WEIGHT_CYCLE.length];
 }
-
-export function replaceAt(array, index, value) {
-    const copy = array.slice();
-    copy[index] = value;
-    return copy;
-}

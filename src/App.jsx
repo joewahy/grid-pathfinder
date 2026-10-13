@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import Controls from './components/Controls.jsx';
 import Grid from './components/Grid.jsx';
 import { ALGORITHMS } from './algorithms/index.js';
-import { MAX_SIZE, MIN_SIZE, createBoard, emptyMarks, nextWeight, replaceAt } from './board.js';
-import { sleep } from './utils.js';
+import { MAX_SIZE, MIN_SIZE, createBoard, emptyMarks, nextWeight } from './board.js';
+import { replaceAt, sleep } from './utils.js';
 
 const DEFAULT_SIZE = 8;
 const STEP_DELAY_MS = 10; // pause between search steps so the search stays visible
