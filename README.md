@@ -17,6 +17,13 @@ An interactive visualizer for pathfinding on a grid. Draw walls, weight tiles, p
 - **Two-stage Clear** — first click clears the search and path; the button becomes **Clear all**, and a second click removes walls and weights too
 - **Algorithm note** — a one-line explainer of the selected algorithm sits between the grid and the controls
 
+## Technologies used
+
+- **[React](https://react.dev/) 19** — UI components and board/search state
+- **[Vite](https://vite.dev/) 8** — dev server and production build, with `@vitejs/plugin-react`
+- **JavaScript (ES modules)** — the app and algorithms, using generators to stream search steps for animation
+- **Plain CSS** — grid layout, tile states, and theme variables, with no UI framework
+
 ## How it works
 
 A React app built with Vite. `App.jsx` owns the board (walls, weights, and the start/end positions as flat arrays indexed by `row * size + column`), the search marks, and the current mode. The top-left tile is the start and the bottom-right is the goal; either can be dragged elsewhere. Clicking **Start** exits wall/weight mode and runs the selected algorithm from the start tile's current position.
